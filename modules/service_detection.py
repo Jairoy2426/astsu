@@ -1,5 +1,5 @@
 from nmap_vscan import vscan
-import sys,platform,os
+import sys,platform,os,logging
 
 def scan_service(target,port):
     # Get the path to service_probes relative to this module
@@ -17,7 +17,8 @@ def scan_service(target,port):
         nmap = vscan.ServiceScan(service_probes_path)
         result = nmap.scan(str(target), int(port), 'tcp')
     except Exception as e:
-        return e
+        logging.error(f"Service scan failed for {target}:{port} - {e}")
+        return None
     service_name = str(result['match']['versioninfo']['cpename'])
     
     service_name = service_name.replace('[','')
